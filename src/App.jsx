@@ -1,18 +1,32 @@
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import Note from './components/Note'
-import { useState } from 'react'
 
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes)
+const App = () => {
+  const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('a new note...')
+  const [showAll, setShowAll] = useState(true)
 
-  const createNote = (e) => {
+  useEffect(() => {
+    console.log('effect')
+    const fetchNotes = async () => {
+      const res = await axios.get('http://localhost:3001/notes')
+      setNotes(res.data)
+    }
+
+    fetchNotes()
+  }, [])
+
+  const createNote = async (e) => {
     e.preventDefault()
     const noteObject = {
       content: newNote,
       important: Math.random() < 0.5,
-      id: notes.length + 1,
     }
-    setNotes(notes.concat(noteObject))
+
+    // Send note object to json server
+    const response = await axios.post('http://localhost:3001/notes', noteObject)
+    setNotes(notes.concat(response.data))
     setNewNote('')
   }
 
@@ -20,11 +34,20 @@ const App = (props) => {
     setNewNote(e.target.value)
   }
 
+  const notesToShow = showAll
+    ? notes
+    : notes.filter((note) => note.important === true)
+
   return (
     <div>
       <h1>Notes</h1>
+      <div>
+        <button onClick={() => setShowAll((prev) => !prev)}>
+          show {showAll ? 'important' : 'all'}
+        </button>
+      </div>
       <ul>
-        {notes.map((note) => (
+        {notesToShow.map((note) => (
           <Note key={note.id} note={note} />
         ))}
       </ul>
