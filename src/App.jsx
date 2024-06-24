@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import Note from './components/Note'
+import Notification from './components/Notification'
+import { getall, create, update } from './services/notes.js'
+import './index.css'
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('a new note...')
+  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [message, setMessage] = useState({})
 
   useEffect(() => {
     console.log('effect')
     const fetchNotes = async () => {
-      const res = await axios.get('http://localhost:3001/notes')
-      setNotes(res.data)
+      const data = await getall()
+      console.log(data)
+      setNotes(data)
     }
 
     fetchNotes()
@@ -24,10 +28,22 @@ const App = () => {
       important: Math.random() < 0.5,
     }
 
-    // Send note object to json server
-    const response = await axios.post('http://localhost:3001/notes', noteObject)
-    setNotes(notes.concat(response.data))
-    setNewNote('')
+    try {
+      // Send note object to json server
+      const data = await create(noteObject)
+      setNotes(notes.concat(data))
+      setNewNote('')
+      setMessage({ type: 'success', text: `Added ${data.content}...` })
+      setTimeout(() => {
+        setMessage({ type: '', text: '' })
+      }, 3000)
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Error creating note...' })
+      setTimeout(() => {
+        setMessage({ type: '', text: '' })
+      }, 3000)
+      console.log('error', error)
+    }
   }
 
   const handleNoteChange = (e) => {
@@ -38,9 +54,36 @@ const App = () => {
     ? notes
     : notes.filter((note) => note.important === true)
 
+  const toggleImportance = async (id) => {
+    try {
+      const note = notes.find((n) => n.id === id)
+      const changedNote = { ...note, important: !note.important }
+
+      const data = await update(id, changedNote)
+      setNotes(notes.map((note) => (note.id !== id ? note : data)))
+      setMessage({
+        type: 'success',
+        text: `Marked ${data.content} as important`,
+      })
+      setTimeout(() => {
+        setMessage({ type: '', text: '' })
+      }, 3000)
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: `Failed to mark note as important`,
+      })
+      console.log('error', error)
+      setTimeout(() => {
+        setMessage({ type: '', text: '' })
+      }, 3000)
+    }
+  }
+
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={message} />
       <div>
         <button onClick={() => setShowAll((prev) => !prev)}>
           show {showAll ? 'important' : 'all'}
@@ -48,11 +91,19 @@ const App = () => {
       </div>
       <ul>
         {notesToShow.map((note) => (
-          <Note key={note.id} note={note} />
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportance={() => toggleImportance(note.id)}
+          />
         ))}
       </ul>
       <form onSubmit={createNote}>
-        <input value={newNote} onChange={handleNoteChange} />
+        <input
+          value={newNote}
+          onChange={handleNoteChange}
+          placeholder="Write here..."
+        />
         <button type="submit">create</button>
       </form>
     </div>

@@ -13,7 +13,7 @@
     {
       "id": "3",
       "content": "GET and POST are the most important methods of HTTP protocol",
-      "important": true
+      "important": false
     },
     {
       "id": "8064",
@@ -23,7 +23,7 @@
     {
       "id": "1b30",
       "content": "froggy",
-      "important": true
+      "important": false
     },
     {
       "id": "bc39",
@@ -34,6 +34,16 @@
       "id": "9795",
       "content": "popori",
       "important": false
+    },
+    {
+      "id": "f2fa",
+      "content": "This is a new note...",
+      "important": true
+    },
+    {
+      "id": "fbea",
+      "content": "YUYUYUY",
+      "important": true
     }
   ]
 }
