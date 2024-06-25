@@ -1,15 +1,16 @@
 import Button from './Button.jsx'
 
-const Note = ({ note, toggleImportance }) => {
+const Note = ({ note, toggleImportance, handleDelete }) => {
   const labelImportant = note.important
     ? 'Make Not Important'
     : 'Make Important'
   const labelDelete = 'Delete'
+
   return (
     <>
       <li>{note.content}</li>
-      <Button toggleImportance={toggleImportance}>{labelImportant} </Button>
-      <Button>{labelDelete}</Button>
+      <Button onClick={toggleImportance}>{labelImportant} </Button>
+      <Button onClick={handleDelete}>{labelDelete}</Button>
     </>
   )
 }

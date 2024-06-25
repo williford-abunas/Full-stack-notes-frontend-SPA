@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
-import { getall, create, update } from './services/notes.js'
+import { getall, create, update, deleteNote } from './services/notes.js'
 import { timeOut } from './services/utils.js'
 import './index.css'
 
@@ -73,6 +73,25 @@ const App = () => {
     }
   }
 
+  const handleDelete = async (id) => {
+    try {
+      await deleteNote(id)
+      setNotes(notes.filter((note) => note.id !== id))
+      setMessage({
+        type: 'success',
+        text: `Deleted note`,
+      })
+      timeOut(setMessage)
+    } catch (error) {
+      console.log('error', error)
+      setMessage({
+        type: 'error',
+        text: `Failed to delete note`,
+      })
+      timeOut(setMessage)
+    }
+  }
+
   return (
     <div>
       <h1>Notes</h1>
@@ -88,6 +107,7 @@ const App = () => {
             key={note.id}
             note={note}
             toggleImportance={() => toggleImportance(note.id)}
+            handleDelete={() => handleDelete(note.id)}
           />
         ))}
       </ul>

@@ -5,5 +5,5 @@ export const timeOut = (setMessage) => {
       type: '',
       text: '',
     }))
-  }, 3000)
+  }, 4000)
 }

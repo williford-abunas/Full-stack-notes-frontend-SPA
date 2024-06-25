@@ -1,7 +1,7 @@
-const Button = ({ toggleImportance, children }) => {
+const Button = ({ onClick, children }) => {
   return (
     <>
-      <button onClick={toggleImportance}>{children}</button>
+      <button onClick={onClick}>{children}</button>
     </>
   )
 }
