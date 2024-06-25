@@ -1,9 +1,15 @@
+import Button from './Button.jsx'
+
 const Note = ({ note, toggleImportance }) => {
-  const label = note.important ? 'make not important' : 'make important'
+  const labelImportant = note.important
+    ? 'Make Not Important'
+    : 'Make Important'
+  const labelDelete = 'Delete'
   return (
     <>
       <li>{note.content}</li>
-      <button onClick={toggleImportance}>{label} </button>
+      <Button toggleImportance={toggleImportance}>{labelImportant} </Button>
+      <Button>{labelDelete}</Button>
     </>
   )
 }

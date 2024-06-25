@@ -15,3 +15,8 @@ export const update = async (id, newObject) => {
   const res = await axios.put(`${baseUrl}/${id}`, newObject)
   return res.data
 }
+
+export const deleteNote = async (id) => {
+  const res = await axios.delete(`${baseUrl}/${id}`)
+  return res.data
+}
