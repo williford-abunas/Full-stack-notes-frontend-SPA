@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import { getall, create, update } from './services/notes.js'
+import { timeOut } from './services/utils.js'
 import './index.css'
 
 const App = () => {
@@ -34,14 +35,10 @@ const App = () => {
       setNotes(notes.concat(data))
       setNewNote('')
       setMessage({ type: 'success', text: `Added ${data.content}...` })
-      setTimeout(() => {
-        setMessage({ type: '', text: '' })
-      }, 3000)
+      timeOut(setMessage)
     } catch (error) {
       setMessage({ type: 'error', text: 'Error creating note...' })
-      setTimeout(() => {
-        setMessage({ type: '', text: '' })
-      }, 3000)
+      timeOut(setMessage)
       console.log('error', error)
     }
   }
@@ -65,18 +62,14 @@ const App = () => {
         type: 'success',
         text: `Marked ${data.content} as important`,
       })
-      setTimeout(() => {
-        setMessage({ type: '', text: '' })
-      }, 3000)
+      timeOut(setMessage)
     } catch (error) {
       setMessage({
         type: 'error',
         text: `Failed to mark note as important`,
       })
       console.log('error', error)
-      setTimeout(() => {
-        setMessage({ type: '', text: '' })
-      }, 3000)
+      timeOut(setMessage)
     }
   }
 
