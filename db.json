@@ -1,13 +1,28 @@
 {
   "notes": [
     {
-      "id": "2",
-      "content": "Browser can execute only JavaScript",
-      "important": false
-    },
-    {
       "id": "3",
       "content": "GET and POST are the most important methods of HTTP protocol",
+      "important": true
+    },
+    {
+      "id": "7a6e",
+      "content": "Nasty girl",
+      "important": true
+    },
+    {
+      "id": "6401",
+      "content": "Gomu gomu no...",
+      "important": true
+    },
+    {
+      "id": "118b",
+      "content": "Watsup madlang Pipol",
+      "important": true
+    },
+    {
+      "id": "0c93",
+      "content": "Fullstack is awesome",
       "important": false
     }
   ]

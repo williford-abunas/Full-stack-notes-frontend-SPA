@@ -4,6 +4,8 @@ import Notification from './components/Notification'
 import { getall, create, update, deleteNote } from './services/notes.js'
 import { timeOut } from './services/utils.js'
 import './index.css'
+import Button from './components/Button.jsx'
+import AddNoteForm from './components/AddNoteForm.jsx'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -60,7 +62,10 @@ const App = () => {
       setNotes(notes.map((note) => (note.id !== id ? note : data)))
       setMessage({
         type: 'success',
-        text: `Marked ${data.content} as important`,
+        text:
+          changedNote.important === true
+            ? `Marked ${data.content} as important`
+            : `Marked ${data.content} as NOT important`,
       })
       timeOut(setMessage)
     } catch (error) {
@@ -79,7 +84,7 @@ const App = () => {
       setNotes(notes.filter((note) => note.id !== id))
       setMessage({
         type: 'success',
-        text: `Deleted note`,
+        text: `Deleted note id:${id}`,
       })
       timeOut(setMessage)
     } catch (error) {
@@ -97,9 +102,9 @@ const App = () => {
       <h1>Notes</h1>
       <Notification message={message} />
       <div>
-        <button onClick={() => setShowAll((prev) => !prev)}>
+        <Button onClick={() => setShowAll((prev) => !prev)}>
           show {showAll ? 'important' : 'all'}
-        </button>
+        </Button>
       </div>
       <ul>
         {notesToShow.map((note) => (
@@ -111,14 +116,11 @@ const App = () => {
           />
         ))}
       </ul>
-      <form onSubmit={createNote}>
-        <input
-          value={newNote}
-          onChange={handleNoteChange}
-          placeholder="Write here..."
-        />
-        <button type="submit">create</button>
-      </form>
+      <AddNoteForm
+        createNote={createNote}
+        newNote={newNote}
+        handleNoteChange={handleNoteChange}
+      />
     </div>
   )
 }
