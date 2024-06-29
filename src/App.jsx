@@ -14,14 +14,17 @@ const App = () => {
   const [message, setMessage] = useState({})
 
   useEffect(() => {
-    console.log('effect')
-    const fetchNotes = async () => {
-      const data = await getall()
-      console.log(data)
-      setNotes(data)
+    try {
+      const fetchNotes = async () => {
+        const data = await getall()
+        console.log(data)
+        setNotes(data)
+      }
+  
+      fetchNotes()
+    } catch (error) {
+      console.error(error.message)
     }
-
-    fetchNotes()
   }, [])
 
   const createNote = async (e) => {
@@ -41,7 +44,7 @@ const App = () => {
     } catch (error) {
       setMessage({ type: 'error', text: 'Error creating note...' })
       timeOut(setMessage)
-      console.log('error', error)
+      console.error('Axios error', error.response ? error.response.data : error.message)
     }
   }
 
