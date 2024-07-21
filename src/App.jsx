@@ -33,7 +33,6 @@ const App = () => {
 
   const createNote = async (e) => {
     e.preventDefault()
-    setMessage({})
     const noteObject = {
       content: newNote,
       important: true,
@@ -49,10 +48,7 @@ const App = () => {
     } catch (error) {
       setMessage({ type: 'error', text: error.message })
       timeOut(setMessage)
-      console.error(
-        'Axios error',
-        error.response ? error.response.data : error.message
-      )
+      console.error('Error adding note:', error)
     }
   }
 
@@ -75,16 +71,16 @@ const App = () => {
         type: 'success',
         text:
           changedNote.important === true
-            ? `Marked ${data.content} as important`
-            : `Marked ${data.content} as NOT important`,
+            ? `Marked note as important`
+            : `Marked note as NOT important`,
       })
       timeOut(setMessage)
     } catch (error) {
       setMessage({
         type: 'error',
-        text: `Failed to mark note as important`,
+        text: error.message,
       })
-      console.log('error', error)
+      console.error('Error toggling importance:', error)
       timeOut(setMessage)
     }
   }
@@ -95,15 +91,15 @@ const App = () => {
       setNotes(notes.filter((note) => note.id !== id))
       setMessage({
         type: 'success',
-        text: `Deleted note id:${id}`,
+        text: `Succesfully deleted note.`,
       })
       timeOut(setMessage)
     } catch (error) {
-      console.log('error', error)
       setMessage({
         type: 'error',
-        text: `Failed to delete note`,
+        text: error.message,
       })
+      console.error('Error deleting note:', error)
       timeOut(setMessage)
     }
   }
