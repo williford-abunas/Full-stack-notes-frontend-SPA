@@ -1,22 +1,20 @@
 import axios from 'axios'
+import { handleResponse } from './utils.js'
 const baseUrl = '/api/notes'
 
+
 export const getall = async () => {
-  const res = await axios.get(baseUrl)
-  return res.data
+  return handleResponse(() => axios.get(baseUrl))
 }
 
 export const create = async (newObject) => {
-  const res = await axios.post(baseUrl, newObject)
-  return res.data
+  return handleResponse(() => axios.post(baseUrl, newObject))
 }
 
 export const update = async (id, newObject) => {
-  const res = await axios.put(`${baseUrl}/${id}`, newObject)
-  return res.data
+  return handleResponse(() => axios.put(`${baseUrl}/${id}`, newObject))
 }
 
 export const deleteNote = async (id) => {
-  const res = await axios.delete(`${baseUrl}/${id}`)
-  return res.data
+  return handleResponse(() => axios.delete(`${baseUrl}/${id}`))
 }

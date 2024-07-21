@@ -14,24 +14,29 @@ const App = () => {
   const [message, setMessage] = useState({})
 
   useEffect(() => {
-    try {
-      const fetchNotes = async () => {
+    const fetchNotes = async () => {
+      try {
         const data = await getall()
-        console.log(data)
         setNotes(data)
+      } catch (error) {
+        setMessage({
+          type: 'error',
+          text: error.message,
+        })
+        timeOut(setMessage)
+        console.error('Error fetching notes:', error)
       }
-  
-      fetchNotes()
-    } catch (error) {
-      console.error(error.message)
     }
+
+    fetchNotes()
   }, [])
 
   const createNote = async (e) => {
     e.preventDefault()
+    setMessage({})
     const noteObject = {
       content: newNote,
-      important: Math.random() < 0.5,
+      important: true,
     }
 
     try {
@@ -39,12 +44,15 @@ const App = () => {
       const data = await create(noteObject)
       setNotes(notes.concat(data))
       setNewNote('')
-      setMessage({ type: 'success', text: `Added ${data.content}...` })
+      setMessage({ type: 'success', text: 'Success adding new note.' })
       timeOut(setMessage)
     } catch (error) {
-      setMessage({ type: 'error', text: 'Error creating note...' })
+      setMessage({ type: 'error', text: error.message })
       timeOut(setMessage)
-      console.error('Axios error', error.response ? error.response.data : error.message)
+      console.error(
+        'Axios error',
+        error.response ? error.response.data : error.message
+      )
     }
   }
 
